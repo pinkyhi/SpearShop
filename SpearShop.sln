@@ -7,6 +7,13 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SpearShopDesktop", "SpearSh
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SpearShopWeb", "SpearShopWeb\SpearShopWeb.csproj", "{F34BE925-4B16-4238-AB8C-E163190584E9}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Info", "Info", "{AA9E2131-B734-40E5-91F6-6B3E35CC4894}"
+	ProjectSection(SolutionItems) = preProject
+		E:\Курсач\MySqlDump10.06.2019.sql = E:\Курсач\MySqlDump10.06.2019.sql
+		E:\Курсач\ReadMe.txt = E:\Курсач\ReadMe.txt
+		E:\Курсач\ПЗПІ_18_7_Владимиров_Іван_Пояснювальна_записка.docx = E:\Курсач\ПЗПІ_18_7_Владимиров_Іван_Пояснювальна_записка.docx
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
