@@ -22,7 +22,7 @@ namespace SpearShopDesktop.Model
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            optionsBuilder.UseMySQL("server=localhost;UserId=root;Password=22Dkflbvbhjd06;database=spearshop;");
+            optionsBuilder.UseMySQL("server=localhost;UserId=root;Password=password;database=spearshop;");
         }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
