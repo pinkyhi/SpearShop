@@ -1,0 +1,176 @@
+﻿@{
+    Layout = null;
+}
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <title>SpearShop</title>
+    <meta charset="utf-8">
+    <meta name="description" content="Интернет магазин" />
+    <meta name="keywords" content="Купить Телефон Смартфон Одежда" />
+    <meta name="robots" content="index,follow" />
+    <meta name="author" content="Ivan Vladymyrov">
+    <link rel="stylesheet" href="~/css/good.css">
+    <link rel="stylesheet" href="~/css/flipImg.css">
+    <link href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
+    <link rel="shortcut icon" href="~/root_images/icon.ico" type="image/x-icon">
+</head>
+<body>
+
+    <header>
+        <a href="/Shop/Categories?page=1">
+            <div id="entry">
+                Spear Shop
+            </div>
+        </a>
+        <!-- <div class="search">
+         <form method="get" action="">
+             <input type="text" placeholder="Введите ваш запрос..." name="searchstr">
+             <input type="submit" value="">
+         </form>
+     </div>-->
+    </header>
+
+    <div id="shadow" style="position: fixed; z-index: 99; width: 100%; height: 100%; background: black; transition: 0.4s; opacity: 0; display: none;">
+    </div>
+
+    
+    <nav id="nav">
+        @{ int navMenuCounter = 2; string px = "px"; string vidName = ""; string imgName = ""; }
+        @{
+
+            if (ViewBag.Imgs != null && ViewBag.Imgs.Count > 0)
+            {
+                string[] t = ViewBag.good.Imgs[0].Img_Path.Split(new char[] { '\\' });
+                imgName = t[t.Length - 1];
+
+            }
+            if (ViewBag.good.Videos != null && ViewBag.good.Videos.Count > 0)
+            {
+                string[] t = ViewBag.good.Videos[0].Video_Path.Split(new char[] { '\\' });
+                vidName = t[t.Length - 1];
+
+            }
+        }
+        @foreach (Category c in ViewBag.Categories)
+        {
+            if (c.Parent_Id == 0)
+            {
+                <ul class="menu" style="left: @navMenuCounter@px; width:120px; font-size:20px;">
+                    <li class="menu-item">
+                        <a href="/Shop/Categories/@c.Name?page=1" class="mainMenuPos" style="font-size:20px;">@c.Name</a>
+                        <ul class="sub-menu">
+                            @{List<Category> subc = new List<Category>();
+                                foreach (Category s in ViewBag.Categories)
+                                {
+                                    if (s.Parent_Id == c.Category_Id)
+                                    {
+                                        subc.Add(s);
+                                    }
+                                }
+                            }
+                            @foreach (Category sc in subc)
+                            {
+                                <li>
+                                    <a href="/Shop/Categories/@sc.Name?page=1">@sc.Name</a>
+                                </li>
+                            }
+                        </ul>
+                    </li>
+                </ul>
+                navMenuCounter += 120;
+            }
+
+        }
+
+    </nav>
+    <script src="~/js/dropdown.js"></script>
+
+    <div id="l1">
+
+
+        <div class="description">
+            <p id="name">@ViewBag.good.Name</p>
+            <p id="dText">@ViewBag.good.Description<br> Цена: @ViewBag.good.Price грн</p>
+
+        </div>
+
+
+        <a id="offer">Заказать</a>
+        <h3 style="position:absolute; bottom:-20px;left:-60px; display:block;">Id: @ViewBag.good.Good_Id</h3>
+        <h3 style="position:absolute; bottom:-38px;left:-60px; display:block;">Available @ViewBag.good.Available</h3>
+
+
+
+
+
+        <div class="card" id="finl">
+            <div class="front">@if (@ViewBag.good.Imgs != null && @ViewBag.good.Imgs.Count > 0)
+            {<img src="~/images/@imgName" alt="">}</div>
+            <div class="back">
+                <div class="details">
+                    <h2>Видеообзор<br></h2>
+                    <div class="social-icons">
+                        <a href="#" id="playButton"><i class="fa fa-play" aria-hidden="true"></i></a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    
+    <div class="vid_Review">
+        @if (@ViewBag.good.Videos != null && @ViewBag.good.Videos.Count > 0)
+        {<video id="vid" src="/videos/@vidName" controls></video>}
+</div>
+    <script src="~/js/videoPlay.js"></script>
+
+    <form class="orderInfo" method="post">
+        <div id="num">
+            Количество
+            @if (ViewBag.good.Available > 0)
+            {
+                <input id="numerator" name="Count" type="number" size="1" min="1" max="@ViewBag.good.Available" value="1" step="1">
+            }
+            else
+            {
+                <input id="numerator" name="Count" type="number" size="1" min="0" max="@ViewBag.good.Available" value="0" step="1">
+            }
+
+        </div>
+        <div class="delivery">
+            <input type="hidden" id="goodId" value="@ViewBag.good.Good_Id" name="Good_Id" />
+            <p>Доставка:</p>
+
+
+            @foreach (Delivery_Type dt in ViewBag.DeliveryTypes)
+            {
+                <p>
+                    <input type="radio" class="deliveryTypeRadio" id="r\@dt.Type_Id" name="Delivery_Type_Id" value="@dt.Type_Id"/>
+                    <label for="r\@dt.Type_Id"><span></span>@dt.Name</label>
+                </p>
+            }
+            <p>
+                Отделение: <input type="text" id="deliveryDep" name="Description" placeholder="Город, отделение">
+            </p>
+            <input type="hidden" id="zoneField" name="Zone" value="" />
+        </div>
+
+        <div class="personInfo">
+            <p>ФИО: <input type="text" id="fio" name="Name" placeholder="ФИО"></p>
+            <p>Номер телефона: <input type="text" id="phone" name="Phone" placeholder="099 999 9999"></p>
+            <p>Почта: <input type="email" id="mail" name="Mail" placeholder="mail@example.com"></p>
+            <!--<p><input id="fullSubmitButton" type="submit" value="Подтверждаю"></p>-->
+            <p><a id="fullSubmitButton">Подтверждаю</a></p>
+        </div>
+
+
+    </form>
+    <script src="~/js/orderForm.js"></script>
+    <script src="~/js/orderValidation.js"></script>
+
+    <footer>
+        (C) IvanVladymyrov
+    </footer>
+</body>
+</html>

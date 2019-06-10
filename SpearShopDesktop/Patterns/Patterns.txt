@@ -1,0 +1,75 @@
+﻿/*
+  try
+            {
+                string myConnection = "datasource=localhost;port=3306;username=root; database=spearshop; password=22Dkflbvbhjd06";
+                MySqlConnection myConn = new MySqlConnection(myConnection);
+                myConn.Open();
+                MessageBox.Show("Connected");
+                string sql = "SELECT name, good_id FROM goods WHERE category_id = 1";
+                MySqlCommand command = new MySqlCommand(sql, myConn);
+                ////ExecuteScalar выдаст только одну строку. Первая что попадется подходящая под WHERE
+                //string name = command.ExecuteScalar().ToString();
+
+                //Получения reader таким образом позволяет считывать строки таблицы, указывая полученные столбцы через индекс в массиве можно обращаться к ним.
+                MySqlDataReader reader = command.ExecuteReader();
+
+                while (reader.Read())
+                {
+                    MessageBox.Show(reader[0].ToString() + " " + reader[1].ToString());
+                }
+                reader.Close();
+                //MessageBox.Show(name);
+
+
+
+                myConn.Close();
+            }
+            catch(Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
+
+ */
+
+
+
+             try
+            {
+                string myConnection = "datasource=localhost;port=3306;username=root; database=spearshop; password=22Dkflbvbhjd06";
+                MySqlConnection myConn = new MySqlConnection(myConnection);
+                myConn.Open();
+                MessageBox.Show("Connected");
+                string selectSql = "SELECT name, good_id FROM goods WHERE category_id = 1";
+                MySqlCommand selectCommand = new MySqlCommand(selectSql, myConn);
+
+                //Получения reader таким образом позволяет считывать строки таблицы, указывая полученные столбцы через индекс в массиве можно обращаться к ним.
+                MySqlDataReader reader = selectCommand.ExecuteReader();
+                while (reader.Read())
+                {
+                    MessageBox.Show(reader[0].ToString() + " " + reader[1].ToString());
+                }
+                reader.Close();
+                //Добавление строки в базу данных.
+                //string insertSql = "INSERT INTO  goods (category_id, manufacturer_id, name, description, price, available) VALUES ('1', '1', 'C', 'Cts', '140', '6')";
+                //MySqlCommand insertCommand = new MySqlCommand(insertSql, myConn);
+                //insertCommand.ExecuteNonQuery();
+
+                //Обновление строки в базе данных.
+                //string updateSql = "UPDATE goods SET description = 'TShirt' WHERE name='C'";
+                //MySqlCommand updateCommand = new MySqlCommand(updateSql, myConn);
+                //updateCommand.ExecuteNonQuery();
+
+                //Удаление строки из базы данных
+                //string deleteSql = "DELETE FROM goods WHERE good_id < 2";
+                //MySqlCommand deleteCommand = new MySqlCommand(deleteSql, myConn);
+                //deleteCommand.ExecuteNonQuery();
+
+
+                myConn.Close();
+
+
+            }
+            catch(Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+            }

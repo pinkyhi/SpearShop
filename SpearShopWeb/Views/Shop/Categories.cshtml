@@ -1,0 +1,200 @@
+﻿@{
+    Layout = null;
+}
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <title>SpearShop</title>
+    <meta charset="utf-8">
+    <meta name="description" content="Интернет магазин" />
+    <meta name="keywords" content="Купить Телефон Смартфон Одежда" />
+    <meta name="robots" content="index,follow" />
+    <meta name="author" content="Ivan Vladymyrov">
+    <link rel="stylesheet" href="~/css/main.css">
+    <link rel="stylesheet" href="~/css/flipImg.css">
+    <link href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
+    <link rel="shortcut icon" href="~/images_root/icon.ico" type="image/x-icon">
+</head>
+<body>
+
+    <header>
+        <a href="/Shop/Categories?page=1">
+            <div id="entry">
+                Spear Shop
+            </div>
+        </a>
+        <div class="search">
+            <form method="get">
+                <input type="text" placeholder="Введите ваш запрос..." name="searchstr">
+                <input type="text" style="display:None" name="sort" value="@ViewBag.Sort" />
+                <input type="text" style="display:None" name="page" value="1" />
+
+                <input type="submit" value="">
+            </form>
+        </div>
+    </header>
+
+    <div id="shadow" style="position: fixed; z-index: 99; width: 100%; height: 100%; background: black; transition: 0.4s; opacity: 0; display: none;">
+    </div>
+
+
+    <nav id="nav">
+        @{ int navMenuCounter = 2; string px = "px"; string l = "l"; int goodPlace = 1; string imgName = ""; int imgNum = 0; string[] imgNames = new string[ViewBag.Goods.Count]; }
+        @{
+            if (ViewBag.Imgs != null && ViewBag.Imgs.Count > 0)
+            {
+
+                for (int i = 0; i < ViewBag.Goods.Count; i++)
+                {
+                    Good gnif = ViewBag.Goods[i];
+                    if (gnif.Imgs != null && gnif.Imgs.Count > 0)
+                    {
+                        string[] temp = gnif.Imgs[0].Img_Path.Split(new char[] { '\\' });
+                        imgName = temp[temp.Length - 1];
+                    }
+                    imgNames[i] = imgName;
+                    imgName = null;
+                }
+            }
+        }
+
+        @foreach (Category c in ViewBag.Categories)
+        {
+            if (c.Parent_Id == 0)
+            {
+                <ul class="menu" style="left: @navMenuCounter@px; width:120px; font-size:20px;">
+                <li class="menu-item">
+                    <a href="/Shop/Categories/@c.Name?page=1" class="mainMenuPos" style="font-size:20px;">@c.Name</a>
+                    <ul class="sub-menu">
+                        @{List<Category> subc = new List<Category>();
+                            foreach (Category s in ViewBag.Categories)
+                            {
+                                if (s.Parent_Id == c.Category_Id)
+                                {
+                                    subc.Add(s);
+                                }
+                            }
+                        }
+                        @foreach (Category sc in subc)
+                        {
+                            <li>
+                                <a href="/Shop/Categories/@sc.Name?page=1">@sc.Name</a>
+                            </li>
+                        }
+                    </ul>
+                </li>
+            </ul>
+            navMenuCounter += 120;
+            }
+            
+        }
+
+    </nav>
+    <script src="~/js/dropdown.js"></script>
+
+    <div id="sort_box" style="width: 140px; left:48%;height:20px; top:-50px; position: relative;">
+        <form class="sort" method="get" style=" width:40px; position: absolute;top:220px;left:-120px;">
+            <input type="submit" id="sortdt" value="  По возрастанию  ">
+            <input type="text" style="display: none" value="lb" name="sort" />
+            <input type="text" style="display: none" value="@ViewBag.page" name="page" />
+            <input type="text" style="display: none" value="@ViewBag.searchstr" name="searchstr" />
+        </form>
+        <form class="sort" method="get" style="width:40px; position:absolute; top:0px;top:220px;right:-30px;">
+            <input type="submit" id="sorttd" value="  По убыванию  ">
+            <input type="text" style="display: none" value="bl" name="sort" />
+            <input type="text" style="display: none" value="@ViewBag.page" name="page" />
+            <input type="text" style="display: none" value="@ViewBag.searchstr" name="searchstr" />
+        </form>
+    </div>
+
+    @for (int ii = 0; ii < ViewBag.Goods.Count; ii++)
+    {
+
+        Good gn = ii < ViewBag.Goods.Count ? ViewBag.Goods[ii] : null;
+        if (gn != null)
+        {
+            string goodName = gn.Name != null ? gn.Name : "";
+            string goodDescription = gn.Description != null ? gn.Description : "";
+            double price = gn.Price > 0 ? gn.Price : 9999999;
+            string goodId = gn.Good_Id + "";
+            <div id="@l@goodPlace">
+
+                <div class="card finl">
+                    <div class="front">
+                        @if (imgNames[imgNum] != null)
+                        {<img src="/images/@imgNames[imgNum]" alt="">}
+                    </div>
+                    <div class="back">
+                        <div class="details">
+                            <h2>@goodName<br> <span> @goodDescription<br> Цена: @price грн</span></h2>
+                            <div class="social-icons">
+                                <a href="/Shop/Good/@goodId"><i class="fa fa-money" aria-hidden="true"></i></a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                @{ imgNum++;}
+                @if (++ii < ViewBag.Goods.Count)
+                {
+                    gn = ViewBag.Goods[ii];
+                    if (gn != null)
+                    {
+                        goodName = gn.Name != null ? gn.Name : "";
+                        goodDescription = gn.Description != null ? gn.Description : "";
+                        price = gn.Price > 0 ? gn.Price : 9999999;
+                        goodId = gn.Good_Id + "";
+                        <div class="card sinl">
+                            <div class="front">
+                                @if (imgNames[imgNum] != null)
+                                {<img src="/images/@imgNames[imgNum]" alt="">}
+                            </div>
+                            <div class="back">
+                                <div class="details">
+                                    <h2>@goodName<br><span> @goodDescription<br> Цена: @price грн</span></h2>
+                                    <div class="social-icons">
+                                        <a href="/Shop/Good/@goodId"><i class="fa fa-money" aria-hidden="true"></i></a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    }
+                }
+
+            </div>      imgNum++;
+            goodPlace++;
+        }
+    }
+
+    @{string categoryName = ViewBag.CategoryName != null ? ("/Shop/Categories/"+ViewBag.CategoryName) : ("/Shop/Categories");}
+
+        @if (ViewBag.IsBack || ViewBag.IsNext)
+         {
+            <div class="transfer" id="transfer">
+           @if (ViewBag.IsBack)
+            {
+                int backpage = ViewBag.Page - 1;
+                <a style="margin:1px" href="@categoryName?sort=@ViewBag.Sort&searchstr=@ViewBag.Searchstr&page=@backpage"><i class="fa fa-chevron-left" aria-hidden="true">    </i></a>
+            }
+           @if (ViewBag.IsNext)
+            {
+                int nextpage = ViewBag.Page + 1;
+                <a style="margin:1px; position:absolute; right:0;" href="@categoryName?sort=@ViewBag.Sort&searchstr=@ViewBag.Searchstr&page=@nextpage"><i class="fa fa-chevron-right" aria-hidden="true">    </i></a>
+            }
+
+            </div>
+         }
+
+
+
+
+
+
+
+
+
+
+    <footer>
+        (C) IvanVladymyrov
+    </footer>
+</body>
+</html>

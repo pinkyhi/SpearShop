@@ -1,0 +1,40 @@
+﻿@{
+    Layout = null;
+}
+<!DOCTYPE html>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Покупка</title>
+</head>
+<body>
+    <div>
+        <h3>Форма оформления покупки @ViewBag.Good.Good_Id</h3>
+        <form method="post" action="">
+            <input type="hidden" value="@ViewBag.Good.Good_Id" name="BookId" />
+            <table>
+                <tr>
+                    <td><p>Status</p></td>
+                    <td><input type="text" name="Status" /> </td>
+                </tr>
+                <tr>
+                    <td><p>Введите адрес :</p></td>
+                    <td>
+                        <input type="text" name="Address" />
+                    </td>
+                </tr>
+                <tr><td><input type="submit" value="Отправить" /> </td><td></td></tr>
+            </table>
+        </form>
+        <form method="post" action="@Url.Action("sds", "ShopController")">
+            <input type="submit" value="sds" />
+        </form>
+
+
+        <form method="get" action="/Shop/Search">
+            <input type="text" name="searchstr" />
+            <input type="submit" value="search" />
+        </form>
+    </div>
+</body>
+</html>
